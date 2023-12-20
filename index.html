@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        #app{
+            width:600px;
+            margin: 20px auto;
+            font-size: 12px;
+        }
+        #app table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #app table td, #app table th{
+            border: 1px solid silver;
+            text-align: center;
+        }
+        .red {
+            color:red;
+        }
+        .green{
+            color:green;
+        }
+    </style>
+  </head>
+  <body>
+    <div id='app'></div>
+    <script>
+
+    // create header row
+     const headerRow = (ar)=>{
+         let cells = ar.map(h=>{
+            return `<th>${h}</th>`
+        })
+        return `<tr>${cells.join('')}</tr>`
+     }
+
+     // create data row
+     const dataRow = (data,i)=>{
+         let cells = data[i].map((d,j)=>{
+            if(data[0][j]=='Close' && i>1){
+                let cl = data[i][j] > data[i-1][j] ? 'green' : 'red'
+                return `<td class="${cl}">${d}</td>`
+            }else{
+                return `<td>${d}</td>`
+            }
+            
+        })
+        return `<tr>${cells.join('')}</tr>`
+     }
+
+     const tbBody = (data) => {
+         return data.map((ar,i)=>{
+            if(i>0) {
+                return dataRow(data,i)
+            }
+         }).join('')
+     }
+
+      const csvToTable = (data) => {
+        // create empty array
+        const csvData = []
+
+        // this will return each line as an individual String
+        const lines = data.split("\n")
+
+        // loop through the lines and return an array of individual
+        // Strings within the line that are separated by a comma
+        for (let i = 0; i < lines.length; i++) {
+          csvData[i] = lines[i].split(",")
+        }
+
+        // check the data
+        console.log(csvData)
+
+        ///////////////////////////////////////////////////////////////
+        // here the csvData 2D array must be converted into html table
+        ///////////////////////////////////////////////////////////////
+
+        let table = headerRow(csvData[0]) + tbBody(csvData)
+
+        document.getElementById('app').innerHTML = `<table>${table}</table>`
+
+      };
+
+      fetch("BTC-USD.csv")
+        .then((response) => response.text())
+        .then((v) => csvToTable(v))
+        .catch((err) => console.log(err))
+      
+    </script>
+  </body>
+</html>

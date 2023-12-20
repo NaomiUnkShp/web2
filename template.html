@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const csvToTable = (data) => {
+        // create empty array
+        const csvData = []
+
+        // this will return each line as an individual String
+        const lines = data.split("\n")
+
+        // loop through the lines and return an array of individual
+        // Strings within the line that are separated by a comma
+
+        for (let i = 0; i < lines.length; i++) {
+          csvData[i] = lines[i].split(",")
+        }
+
+        // check the data
+        console.log(csvData)
+
+        ///////////////////////////////////////////////////////////////
+        // here the csvData 2D array must be converted into html table
+        ///////////////////////////////////////////////////////////////
+
+      };
+
+      fetch("BTC-USD.csv")
+        .then((response) => response.text())
+        .then((v) => csvToTable(v))
+        .catch((err) => console.log(err))
+      
+    </script>
+  </body>
+</html>
